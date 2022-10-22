@@ -21,4 +21,8 @@ export default styles = StyleSheet.create({
         color: '#272525',
         fontSize: 30,
       },
+
+      logo: {
+        width: 10,
+      },
 });
