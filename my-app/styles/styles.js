@@ -18,7 +18,7 @@ export default styles = StyleSheet.create({
       },
 
       text: {
-        color: '272525',
-        fontSize: 50,
+        color: '#272525',
+        fontSize: 30,
       },
 });
