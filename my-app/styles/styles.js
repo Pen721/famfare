@@ -25,4 +25,13 @@ export default styles = StyleSheet.create({
       logo: {
         width: 10,
       },
+
+      input: {
+        height: 50,
+        width: '100%',
+        borderWidth: 1,
+        padding: 15,
+        marginBottom: 20,
+        borderColor: 'gray',
+    },
 });
