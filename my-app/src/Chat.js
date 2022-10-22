@@ -4,24 +4,39 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/styles.js';
 import { GiftedChat } from 'react-native-gifted-chat';
 import {db} from '../src/config.js';
+import { collection, addDoc } from "firebase/firestore"; 
+
+import { getDatabase, ref, set } from "firebase/database";
+
+function writeUserData(userId, name, email, imageUrl) {
+  set(ref(db, userId), {
+    username: name,
+    email: email,
+    profile_picture : imageUrl
+  });
+}
+
+writeUserData("10000", "who", "wtf@gmail.com", "www.wtf.com");
+
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
 
-  async function saveMessage(messageText) {
+//   async function addAda(messageText) {
     // Add a new message entry to the Firebase database.
-    try {
-      await addDoc(collection(getFirestore(), 'messages'), {
-        name: getUserName(),
-        text: messageText,
-        profilePicUrl: getProfilePicUrl(),
-        timestamp: serverTimestamp()
-      });
-    }
-    catch(error) {
-      console.error('Error writing new message to Firebase Database', error);
-    }
-  }
+//     try {
+//         const docRef = await addDoc(collection(db, "/family1"), {
+//           first: "Ada",
+//           last: "Lovelace",
+//           born: 1815
+//         });
+//         console.log("Document written with ID: ", docRef.id);
+//       } catch (e) {
+//         console.error("Error adding document: ", e);
+//       }
+//   }
+
+//   addAda()
 
   useEffect(() => {
     setMessages([
