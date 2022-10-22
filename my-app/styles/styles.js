@@ -21,4 +21,13 @@ export default styles = StyleSheet.create({
         color: '#272525',
         fontSize: 30,
       },
+
+      input: {
+        height: 50,
+        width: '100%',
+        borderWidth: 1,
+        padding: 15,
+        marginBottom: 20,
+        borderColor: 'gray',
+    },
 });
