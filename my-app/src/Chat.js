@@ -8,15 +8,15 @@ import { collection, addDoc } from "firebase/firestore";
 
 import { getDatabase, ref, set } from "firebase/database";
 
-function writeUserData(userId, name, email, imageUrl) {
-  set(ref(db, userId), {
-    username: name,
-    email: email,
-    profile_picture : imageUrl
-  });
-}
+// function writeUserData(userId, name, email, imageUrl) {
+//   set(ref(db, userId), {
+//     username: name,
+//     email: email,
+//     profile_picture : imageUrl
+//   });
+// }
 
-writeUserData("10000", "who", "wtf@gmail.com", "www.wtf.com");
+// writeUserData("10000", "who", "wtf@gmail.com", "www.wtf.com");
 
 
 export default function Chat() {
