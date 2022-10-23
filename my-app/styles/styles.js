@@ -66,7 +66,7 @@ export default styles = StyleSheet.create({
 
     flipButton: {
       backgroundColor: 'white',
-      width: '15%',
+      width: '20%',
       padding: 12,
       marginTop: 15,
       borderRadius: 30,

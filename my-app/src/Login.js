@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core'
 import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
 import { Image, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, StyledContainer, InnerContainer, Pagelogo, PageTitle } from 'react-native'
-import { auth } from '../firebaseConfig'
+import { auth } from './config.js'
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth"
 
 

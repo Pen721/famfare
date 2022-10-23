@@ -6,17 +6,32 @@ import { Camera, CameraType } from 'expo-camera';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { async } from '@firebase/util';
+import { getAuth } from "firebase/auth";
+import { db } from "../src/config"
+import { ref, set } from "firebase/database";
+import { useNavigation } from '@react-navigation/core'
+
 
 export default function Question() {
     const [type, setType] = useState(CameraType.back);
     const [camera, setCamera] = useState(null)
     const [image, setImage] = useState(null)
-
-    //hooks to hide camera view 
-    const [previewVisible, setPreviewVisible] = useState(false)
-    const [capturedImage, setCapturedImage] = useState(null)
-    
     const [permission, requestPermission] = Camera.useCameraPermissions(); 
+
+    const navigation = useNavigation()
+
+    var moment = require('moment'); // require
+    moment().format(); 
+
+    function writeQuestionData (chatId, time_index, username, imageUrl) {
+      set(ref(db, 'DailyPhotos/' + chatId), {
+        time_index: {
+          username: {
+            image : imageUrl
+          }
+        } 
+      });
+    }
 
     if (!permission) {
         // Camera permissions are still loading
@@ -41,37 +56,34 @@ export default function Question() {
       setCapturedImage(data)
     }
 
-    const CameraPreview = ({photo}) => {
-      console.log('The photo:', photo)
-      return (
-        <View
-          style={{
-            backgroundColor: 'transparent',
-            flex: 1,
-            width: '100%',
-            height: '100%'
-          }}
-        >
-          <ImageBackground
-            source={{uri: photo && photo.uri}}
-            style={{
-              flex: 1
-            }}
-          />
-        </View>
-      )
-    }
-
     function toggleCameraType() {
         setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
       }
-    
-    // const __retakePicture = () => {
-    //   setCapturedImage(null)
-    //   setPreviewVisible(false)
-    //   __startCamera()
-    // }
 
+    function uploadImage() {
+      
+      //get the current active user 
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // ...
+        console.log(user.email);
+        console.log(image);
+        var start = moment([2022, 9, 23]);
+        var now = moment();
+        writeQuestionData("000000001", now.diff(start, 'days'), user.email, image);
+
+        navigation.navigate("Chat")
+      }   
+      //otherwise no user is signed in 
+    }
+
+
+    //family chat id -- multiple (username, image, date)
+    //only need day information
   return (
     <View style={{flex:1}}>
        <Text style={styles.text}>So, what's your vibe today?</Text>
@@ -82,12 +94,6 @@ export default function Question() {
         type = {type}
         ratio={'1:1'} />
       </View>
-
-      
-
-      {/* <Button title="Take Picture"
-      onPress={() => takePicture()}
-      /> */}
 
 
       <View style={styles.buttonContainer}>
@@ -118,7 +124,7 @@ export default function Question() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress = {toggleCameraType}
+          onPress = {uploadImage}
           style={styles.uploadButton}
         >
           <Text style={styles.uploadText}>Upload</Text>
