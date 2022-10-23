@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 15,
+    flex: 'horizontal',
   },
   loginButton: {
     backgroundColor: '#7690C9',
