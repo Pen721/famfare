@@ -10,6 +10,9 @@ import { getAuth } from "firebase/auth";
 import { db } from "../src/config"
 import { ref, set } from "firebase/database";
 import { useNavigation } from '@react-navigation/core'
+import { getStorage, uploadBytes, getDownloadURL, uploadString } from "firebase/storage";
+import { ref as sRef } from 'firebase/storage';
+import * as FileSystem from 'expo-file-system';
 
 
 export default function Question() {
@@ -48,12 +51,34 @@ export default function Question() {
         );
       }
 
+    
+    async function getImageToBase64(imageURL) {
+      let image;
+    
+      try {
+        const { uri } = await FileSystem.downloadAsync(
+          imageURL,
+          FileSystem.documentDirectory + 'bufferimg.png'
+        );
+    
+        image = await FileSystem.readAsStringAsync(uri, {
+          encoding: 'base64',
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    
+      return image;
+    }
+
     const takePicture = async () => {
       if (!camera) return
       const data = await camera.takePictureAsync(null)
       setImage(data.uri)
+      console.log(data.uri)
       setPreviewVisible(true)
       setCapturedImage(data)
+          
     }
 
     function toggleCameraType() {
@@ -72,11 +97,28 @@ export default function Question() {
         // ...
         console.log(user.email);
         console.log(image);
-        var start = moment([2022, 9, 23]);
-        var now = moment();
-        writeQuestionData("000000001", now.diff(start, 'days'), user.email, image);
 
-        navigation.navigate("Chat")
+        if (image) {
+          var start = moment([2022, 9, 23]);
+          var now = moment();
+          writeQuestionData("000000001", now.diff(start, 'days'), user.email, image);
+
+
+          const storage = getStorage();
+          const storageRef = sRef(storage, 'test3.jpg');
+
+          uploadBytes(storageRef, image).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+          });
+
+          // getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          //   console.log('File available at', downloadURL);
+          // });
+
+
+          navigation.navigate("Chat")
+        }
+        
       }   
       //otherwise no user is signed in 
     }

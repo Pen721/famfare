@@ -53,7 +53,7 @@ export default function Login() {
         // Signed in 
         const user = userCredential.user;
         console.log('Logged in with:', user.email);
-        navigation.replace("Question")
+        navigation.navigate("Question")
         // ...
       })
       .catch((error) => {
